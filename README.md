@@ -1,3 +1,4 @@
 # ViperUIKit
 
-A description of this package.
+A set of VIPER protocols for UIKit.
+
