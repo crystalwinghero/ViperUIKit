@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BaseEntity : Equatable {
+public protocol BaseEntity : Equatable {
     associatedtype PK : Equatable
     var pk : PK { get }
 }

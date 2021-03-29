@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol BaseRouter {
+public protocol BaseRouter {
     associatedtype T : UIViewController, PresentableView
     
     init()

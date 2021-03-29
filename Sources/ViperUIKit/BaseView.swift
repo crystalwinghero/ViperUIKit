@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PresentableView : class {
+public protocol PresentableView : class {
     associatedtype Presenter : BasePresenter
     var presenter : Presenter! { get set }
     var item : Presenter.Entity? { get set }
@@ -30,7 +30,7 @@ extension PresentableView {
     func reloadContent() { presenter.reloadContent() }
 }
 
-protocol TablePresentableView : PresentableView where Presenter: BaseTablePresenter {
+public protocol TablePresentableView : PresentableView where Presenter: BaseTablePresenter {
     var tableView : UITableView! { get set }
 }
 extension TablePresentableView {

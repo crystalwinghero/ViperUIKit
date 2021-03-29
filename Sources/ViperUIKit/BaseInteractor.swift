@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BaseInteractor {
+public protocol BaseInteractor {
     associatedtype Response
     associatedtype Object
     init()

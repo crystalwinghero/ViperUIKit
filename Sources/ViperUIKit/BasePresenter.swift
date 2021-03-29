@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol BasePresenter : class {
+public protocol BasePresenter : class {
     associatedtype View : PresentableView
     associatedtype Interactor : BaseInteractor
     associatedtype Entity : BaseEntity
@@ -43,7 +43,7 @@ extension BasePresenter {
     static func createInteractor() -> Interactor { Interactor() }
 }
 
-protocol BaseTablePresenter : BasePresenter where View: TablePresentableView {
+public protocol BaseTablePresenter : BasePresenter where View: TablePresentableView {
     var tableView : UITableView! { get }
 }
 extension BaseTablePresenter {
