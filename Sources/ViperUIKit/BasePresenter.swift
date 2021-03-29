@@ -29,7 +29,7 @@ public protocol BasePresenter : class {
     static func createRouter() -> Router
     static func createInteractor() -> Interactor
 }
-extension BasePresenter {
+public extension BasePresenter {
     init(_ view :View!) {
         self.init(view, Self.createInteractor(), Self.createRouter())
     }
@@ -46,7 +46,7 @@ extension BasePresenter {
 public protocol BaseTablePresenter : BasePresenter where View: TablePresentableView {
     var tableView : UITableView! { get }
 }
-extension BaseTablePresenter {
+public extension BaseTablePresenter {
     var tableView : UITableView! { view.tableView }
     
 }

@@ -11,7 +11,7 @@ public protocol BaseEntity : Equatable {
     associatedtype PK : Equatable
     var pk : PK { get }
 }
-extension BaseEntity {
+public extension BaseEntity {
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.pk == rhs.pk
     }

@@ -16,7 +16,7 @@ public protocol PresentableView : class {
     func loadContent()
     func reloadContent()
 }
-extension PresentableView {
+public extension PresentableView {
     var item : Presenter.Entity? {
         get { presenter.item }
         set { presenter.item = newValue }
@@ -32,7 +32,4 @@ extension PresentableView {
 
 public protocol TablePresentableView : PresentableView where Presenter: BaseTablePresenter {
     var tableView : UITableView! { get set }
-}
-extension TablePresentableView {
-    
 }
