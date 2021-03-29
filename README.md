@@ -113,6 +113,7 @@ struct MyEntity : BaseEntity {
 
 ### Router
 Add `BaseRouter` on your Router
+
 *Note: default `Router.create()` will try to create VC from nib, implements your own otherwise.*
 ``` swift
 import ViperUIKit
@@ -193,7 +194,7 @@ final class MyTablePresenter: NSObject, BaseTablePresenter {
     //3. default methods
     func setup() {
         //NOTE: you can refer tableView from your view directly
-        self.register(Cell.nib, forCellReuseIdentifier: Cell.identifier)
+        tableView.register(Cell.nib, forCellReuseIdentifier: Cell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
     }
