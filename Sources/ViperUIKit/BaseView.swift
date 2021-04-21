@@ -8,28 +8,30 @@
 import UIKit
 
 public protocol PresentableView : class {
-    associatedtype Presenter : BasePresenter
-    var presenter : Presenter! { get set }
-    var item : Presenter.Entity? { get set }
-    var list : [Presenter.Entity] { get set }
+    associatedtype Viper : BaseViper
+    var presenter : Viper.Presenter! { get set }
+    var item : Viper.Entity? { get set }
+    var list : [Viper.Entity] { get set }
     func setup()
     func loadContent()
     func reloadContent()
 }
 public extension PresentableView {
-    var item : Presenter.Entity? {
+    var item : Viper.Entity? {
         get { presenter.item }
         set { presenter.item = newValue }
     }
-    var list : [Presenter.Entity] {
+    var list : [Viper.Entity] {
         get { presenter.list }
         set { presenter.list = newValue }
     }
+}
+public extension PresentableView {
     func setup() { presenter.setup() }
     func loadContent() { presenter.loadContent() }
     func reloadContent() { presenter.reloadContent() }
 }
 
-public protocol TablePresentableView : PresentableView where Presenter: BaseTablePresenter {
+public protocol TablePresentableView : PresentableView where Viper.Presenter: BaseTablePresenter {
     var tableView : UITableView! { get set }
 }

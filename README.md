@@ -1,6 +1,7 @@
 # ViperUIKit
 
 A set of VIPER protocols for UIKit.
+To help you quicky implement VIPER pattern to your UIViewController. 
 
 ## Installation
 
@@ -8,34 +9,49 @@ A set of VIPER protocols for UIKit.
 
 1. In Xcode, select `File` > `Swift Packages` > `Add Package Dependency...`
 2. Enter the URL for this repository `https://github.com/crystalwinghero/ViperUIKit.git`
-3. Choose a minimum semantic version of `v1.0.0`
+3. Choose a minimum semantic version of `v1.1.0`
 
 ## Implementation
+
+Note: you can follow the examples for in `Examples` folder.
+
+### Viper
+Mapping object for all V-I-P-E-R classes/structs together as a whole.
+``` swift
+import ViperUIKit
+
+struct SampleViper : BaseViper {
+    typealias View = SampleViewController
+    typealias Interactor = SampleInteractor
+    typealias Presenter = SamplePresenter
+    typealias Entity = SampleEntity
+    typealias Router = SampleRouter
+}
+
+```
 
 ### View
 Add `PresentableView` protocol on your ViewController.
 ``` swift
 import ViperUIKit
 
-class MyViewController: UIViewController, PresentableView {
-    //1. set type of your presenter
-    typealias Presenter = MyPresenter  
-
-    //2. set your presenter ref
-    var presenter: Presenter!
-
+class SampleViewController : UIViewController, PresentableView {
+    //1. declare type
+    typealias Viper = SampleViper
+    
+    //2. declare presenter
+    var presenter: Viper.Presenter!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //3. setting up your vc
+        //3. call setup
         presenter.setup()
     }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //4. load page content
+        //4. load content
         presenter.loadContent()
     }
-    
 }
 ```
 
@@ -44,18 +60,15 @@ Add `BaseInteractor` on your Interactor.
 ``` swift
 import ViperUIKit
 
-struct MyInteractor : BaseInteractor {
-    //1. Type of response + object
-    typealias Response = Bool
-    typealias Object = MyEntity
+struct SampleInteractor : BaseInteractor {
+    typealias Response = Any
     
-    //2. implement how you fetch your data
-    func fetch(_ completion: @escaping (Bool) -> Void) {
-        //TODO: fetch logic here
-        completion(true)
+    func fetch(_ completion: @escaping (Any) -> Void) {
+        //TODO: add logic here
+        completion("Hello, world!")
     }
+    
 }
-
 ```
 
 ### Presenter
@@ -63,21 +76,18 @@ Add `BasePresenter` on your Presenter.
 ``` swift
 import ViperUIKit
 
-///NOTE: mark as final class
-final class MyPresenter: NSObject, BasePresenter {
-    //1. declare types of your View, Interactor, Entity, and router
-    typealias View = MyViewController
-    typealias Interactor = MyInteractor
-    typealias Entity = MyEntity
-    typealias Router = MyRouter
+///NOTE: mark as final class + inherits from NSObject
+final class SamplePresenter : NSObject, BasePresenter {
+    //1. declare type
+    typealias Viper = SampleViper
     
     //2. declare variables for your VIPER
     //NOTE: always weak, to prevent retain cycle
-    weak var view : View!
-    var interactor: Interactor!
-    var router: Router!
-    var item : Entity?
-    var list : [Entity] = []
+    weak var view : Viper.View!
+    var interactor: Viper.Interactor!
+    var router: Viper.Router!
+    var item : Viper.Entity?
+    var list : [Viper.Entity] = []
     
     //3. default methods
     func setup() {
@@ -93,124 +103,38 @@ final class MyPresenter: NSObject, BasePresenter {
         //TODO: add reload method
     }
 }
-
 ```
 
 ### Entity
-Add `BaseEntity` on your Entity
+Add `BaseEntity` on your Entity.
 ``` swift
 import ViperUIKit
 
-struct MyEntity : BaseEntity {
-    //declare your PK type and value
+struct SampleEntity : BaseEntity {
     typealias PK = Int
     var pk : PK { id }
     var id : Int
-    var title : String?
 }
-
 ```
 
 ### Router
-Add `BaseRouter` on your Router
+Add `BaseRouter` on your Router.
 
-*Note: default `Router.create()` will try to create VC from nib, implements your own otherwise.*
+*Note: default `Router.create()` will call `createWithNib()` by default, override it with `createWithStoryboard()`, or implements it the way your viewController needed to otherwise.*
 ``` swift
 import ViperUIKit
 
-struct MyRouter : BaseRouter {
-    typealias T = MyViewController
+struct SampleRouter : BaseRouter {
+    typealias Viper = SampleViper
     
-    //NOTE: your can create your own create() method here
-    /**
-    static func create() -> T {
-        let vc = T.instanceFromStoryboard()
-        let presenter = T.Presenter(vc)
-        vc.presenter = presenter
-        return vc
-    }
-    */
 }
 ```
 
 ## Usage
-Create your VC through `Router.create()` method
+Create your VC through `Router.create()` method.
 ``` swift
     //... 
     let vc = MyRouter.create() // VC will be created and linked with VIPER objects 
     self.navigationController?.pushViewController(vc, animated: true)
     //...
-```
-
-## Extra
-
-### TablePresentableView
-For ViewController with `UITableView` inside.
-``` swift
-import ViperUIKit
-
-class MyViewController: UIViewController, TablePresentableView {
-    //1. set type of your presenter
-    typealias Presenter = MyPresenter  
-
-    //2. set your presenter var
-    var presenter: Presenter!
-    
-    //3. your tableView
-    @IBOutlet weak var tableView : UITableView!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //4. setting up your vc
-        presenter.setup()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //5. load page content
-        presenter.loadContent()
-    }
-    
-}
-```
-
-### BaseTablePresenter
-Using together with `TablePresentableView`
-``` swift
-final class MyTablePresenter: NSObject, BaseTablePresenter {
-    typealias View = MyViewController
-    typealias Interactor = MyInteractor
-    typealias Entity = MyEntity
-    typealias Router = MyRouter
-
-    //2. declare variables for your VIPER
-    //NOTE: always weak, to prevent retain cycle
-    weak var view : View!
-    var interactor: Interactor!
-    var router: Router!
-    var item : Entity?
-    var list : [Entity] = []
-
-    //3. default methods
-    func setup() {
-        //NOTE: you can refer tableView from your view directly
-        tableView.register(Cell.nib, forCellReuseIdentifier: Cell.identifier)
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-    func loadContent() {
-        interactor.fetch { [weak self](list) in
-            self?.list = list
-            self?.tableView.reloadData()
-        }
-    }
-    func reloadContent() {
-        self.loadContent()
-    }
-}
-
-extension MyTablePresenter : UITableViewDataSource, UITableViewDelegate {
-    //...
-}
-
 ```

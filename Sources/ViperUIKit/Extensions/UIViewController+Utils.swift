@@ -10,7 +10,7 @@ import UIKit
 /*
  NOTE: https://stackoverflow.com/questions/27099054/load-uiviewcontroller-from-the-separate-nib-file-in-swift#answer-52872923
  */
-public extension UIViewController {
+extension UIViewController {
     static var identifier : String { String(describing: self) }
     static func instanceFromNib() -> Self {
         func instantiateFromNib<T: UIViewController>() -> T {

@@ -8,25 +8,25 @@
 import UIKit
 
 public protocol BaseRouter {
-    associatedtype T : UIViewController, PresentableView
+    associatedtype Viper : BaseViper
     
     init()
-    static func create() -> T
+    static func create() -> Viper.View
 }
 
-public extension BaseRouter where T.Presenter.View == Self.T {
-    static func create() -> T {
+public extension BaseRouter where Viper.View : UIViewController {
+    static func create() -> Viper.View {
         return createWithNib()
     }
-    static func createWithNib() -> T {
-        let vc = T.instanceFromNib()
-        let presenter = T.Presenter(vc)
+    static func createWithNib() -> Viper.View {
+        let vc = Viper.View.instanceFromNib()
+        let presenter = Viper.Presenter(vc)
         vc.presenter = presenter
         return vc
     }
-    static func createWithStoryboard() -> T {
-        let vc = T.instanceFromStoryboard()
-        let presenter = T.Presenter(vc)
+    static func createWithStoryboard() -> Viper.View {
+        let vc = Viper.View.instanceFromStoryboard()
+        let presenter = Viper.Presenter(vc)
         vc.presenter = presenter
         return vc
     }
