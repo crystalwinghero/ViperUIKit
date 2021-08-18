@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol BasePresenter : class {
+public protocol BasePresenter : AnyObject {
     associatedtype Viper : BaseViper
     
     var view : Viper.View! { get set }

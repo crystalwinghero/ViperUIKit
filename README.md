@@ -61,9 +61,10 @@ Add `BaseInteractor` on your Interactor.
 import ViperUIKit
 
 struct SampleInteractor : BaseInteractor {
+    typealias Input = Any
     typealias Response = Any
     
-    func fetch(_ completion: @escaping (Any) -> Void) {
+    func fetch(_ input : Input?, _ completion: @escaping (Response) -> Void) {
         //TODO: add logic here
         completion("Hello, world!")
     }
