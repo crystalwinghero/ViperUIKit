@@ -17,6 +17,13 @@ public protocol BasePresenter : AnyObject {
     var list : [Viper.Entity] { get set }
     
     func setup()
+    func tearDown()
+    
+    //additional methods for UIKit Life Cycle
+    func onViewWillAppear()
+    func onViewWillDisappear()
+    func viewDidLayoutSubviews()
+    
     func loadContent()
     func reloadContent()
     
@@ -38,6 +45,11 @@ public extension BasePresenter {
     }
     static func createRouter() -> Viper.Router { Viper.Router() }
     static func createInteractor() -> Viper.Interactor { Viper.Interactor() }
+    
+    //Optional func
+    func onViewWillAppear() {}
+    func onViewWillDisappear() {}
+    func viewDidLayoutSubviews() {}
 }
 
 public protocol BaseTablePresenter : BasePresenter where Viper.View: TablePresentableView {
