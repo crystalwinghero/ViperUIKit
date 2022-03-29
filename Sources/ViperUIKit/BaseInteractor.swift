@@ -4,19 +4,24 @@
 //
 //  Created by crystalwinghero on 29/3/21.
 //
+#if !os(macOS)
+import Combine
 
-import Foundation
-
-public protocol BaseInteractor {
-    associatedtype Input
-    associatedtype Response
-    init()
-    func fetch(_ input : Input?, _ completion : @escaping (Response)->Void)
-    func fetch(_ completion : @escaping (Response)->Void)
+public protocol DataFetchable {
+  associatedtype Input
+  associatedtype Response
+  
+  func fetch() -> AnyPublisher<Response,Never>
+  func fetch(_ input : Input?) -> AnyPublisher<Response,Never>
 }
 
-public extension BaseInteractor {
-    func fetch(_ completion : @escaping (Response)->Void) {
-        self.fetch(nil, completion)
-    }
+public extension DataFetchable {
+  func fetch() -> AnyPublisher<Response,Never> {
+    self.fetch(nil)
+  }
+}
+#endif
+
+public protocol BaseInteractor {
+  init()
 }

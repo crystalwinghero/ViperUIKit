@@ -5,7 +5,9 @@
 //  Created by Buzzwoo MBP on 29/3/21.
 //
 
+#if !os(macOS)
 import UIKit
+
 
 /*
  NOTE: https://stackoverflow.com/questions/27099054/load-uiviewcontroller-from-the-separate-nib-file-in-swift#answer-52872923
@@ -24,3 +26,4 @@ extension UIViewController {
         return storyboard.instantiateViewController(withIdentifier: identifier) as! Self
     }
 }
+#endif
